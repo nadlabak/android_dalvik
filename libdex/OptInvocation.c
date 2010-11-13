@@ -128,7 +128,7 @@ char* dexOptGenerateCacheFileName(const char* fileName, const char* subFileName)
 
     /* Cache anything in cacheRoot (dexopt-cache-only overrides dexopt-data-only) */
     property_get("dalvik.vm.dexopt-cache-only", dexoptCacheOnly, "");
-    if (strcmp(dexoptCacheOnly, "1") == 0) {
+    if (!strcmp(dexoptCacheOnly, "1")) {
         dexRoot = cacheRoot;
     }
 
