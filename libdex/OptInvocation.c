@@ -117,8 +117,8 @@ char* dexOptGenerateCacheFileName(const char* fileName, const char* subFileName)
     if (dexRoot == NULL)
         dexRoot = "/data";
 
-    /* Cache anything stored on /system in cacheRoot, everything else in dataRoot */
-    if (!strncmp(absoluteFile, systemRoot, strlen(systemRoot))) {
+    /* Cache anything stored on /system and google apps in cacheRoot, everything else in dataRoot */
+    if (!strncmp(absoluteFile, systemRoot, strlen(systemRoot)) || strstr(absoluteFile, "google") != NULL) {
         property_get("dalvik.vm.dexopt-data-only", dexoptDataOnly, "");
         if (strcmp(dexoptDataOnly, "1") != 0) {
             dexRoot = cacheRoot;
