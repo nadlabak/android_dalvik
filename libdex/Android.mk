@@ -65,6 +65,9 @@ ifeq ($(dvm_make_debug_vm),false)
   # hide ELF symbols to reduce code size
   LOCAL_CFLAGS += -fvisibility=hidden
 endif
+ifeq ($(WITH_DEXPREOPT), true)
+  LOCAL_CFLAGS += -DDEXPREOPT_IN_USE
+endif
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE := libdex
 include $(BUILD_STATIC_LIBRARY)
