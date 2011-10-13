@@ -56,6 +56,7 @@ char* dexOptGenerateCacheFileName(const char* fileName, const char* subFileName)
     const char* systemRoot;
     char* cp;
     char dexoptDataOnly[PROPERTY_VALUE_MAX];
+    char dexoptCacheOnly[PROPERTY_VALUE_MAX];
 
     /*
      * Get the absolute path of the Jar or DEX file.
@@ -117,12 +118,12 @@ char* dexOptGenerateCacheFileName(const char* fileName, const char* subFileName)
     if (dexRoot == NULL)
         dexRoot = "/data";
 
-    /* Cache anything stored on /system and google apps in cacheRoot, everything else in dataRoot */
-#ifdef DEXPREOPT_IN_USE
-    if (1) {
-#else
-    if (!strncmp(absoluteFile, systemRoot, strlen(systemRoot)) || strstr(absoluteFile, "google") != NULL) {
-#endif
+    /* Cache anything in cacheRoot (dexopt-cache-only overrides dexopt-data-only)
+    /* or cache anything stored on /system and google apps in cacheRoot, everything else in dataRoot */
+    property_get("dalvik.vm.dexopt-cache-only", dexoptCacheOnly, "");
+    if (!strcmp(dexoptCacheOnly, "1")) {
+        dexRoot = cacheRoot;
+    } else if (!strncmp(absoluteFile, systemRoot, strlen(systemRoot)) || strstr(absoluteFile, "google") != NULL) {
         property_get("dalvik.vm.dexopt-data-only", dexoptDataOnly, "");
         if (strcmp(dexoptDataOnly, "1") != 0) {
             dexRoot = cacheRoot;
